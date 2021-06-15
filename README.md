@@ -1,4 +1,4 @@
-# tkinterFlow
+# tkFlow
 
 This is a project to add the functionality of a 'flow layout' to Python Tkinter graphical user interface module. Right now, Tkinter has the Pack, Grid, and Place geometry managers. I would like it to have Flow, and the behavior or a widget using the Flow geometry manager would be like text wrapping. 
 
