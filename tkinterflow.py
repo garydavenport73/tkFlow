@@ -2433,6 +2433,39 @@ class Grid:
     slaves = grid_slaves = Misc.grid_slaves
 
 
+class Flow:
+    """Geometry manager Flow."""
+    def flow(self, cnf={}, **kw):
+        if (str(self.master)=="."):
+            print("cannot be used at root level.  Put frame in root level and use frame")
+            return
+        self.tk.call(
+            ('grid', 'configure', self._w)
+            + self._options(cnf, kw))
+        self.master.bind("<Configure>", lambda event:self._reorganizeWidgets())
+
+    def _reorganizeWidgets(self):
+        names=[]
+        for name in self.master.children:
+            names.append(name)
+        rowNumber=0
+        columnNumber=0
+        width=0
+        i=0
+        while i<len(self.master.children):
+            width+=self.master.children[names[i]].winfo_width()
+            if i==0:
+                self.master.children[names[i]].grid(row=rowNumber, column=columnNumber)
+            elif width > self.master.winfo_width():
+                rowNumber=rowNumber+1             
+                columnNumber = 0               
+                width=self.master.children[names[i]].winfo_width()
+            else:
+                columnNumber=columnNumber+1
+            self.master.children[names[i]].grid(row=rowNumber, column=columnNumber)
+            i+=1
+
+
 class BaseWidget(Misc):
     """Internal class."""
 
@@ -2496,7 +2529,7 @@ class BaseWidget(Misc):
         return self.tk.call((self._w, name) + args)
 
 
-class Widget(BaseWidget, Pack, Place, Grid):
+class Widget(BaseWidget, Pack, Place, Grid, Flow):
     """Internal class.
     Base class for a widget which can be positioned with the geometry managers
     Pack, Place or Grid."""
