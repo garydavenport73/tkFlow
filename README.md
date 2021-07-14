@@ -9,7 +9,7 @@ pip install tkinterflow
 then use the following import statements
 ```
 from tkinter import *
-from tkinter.flow import *
+from tkinterflow.flowmethods import *
 ```
 Now instead of using statments like:
 ```
