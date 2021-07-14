@@ -1,4 +1,3 @@
-from tkinter import *
 """Wrapper functions for Tcl/Tk.
 Tkinter provides classes which allow the display, positioning and
 control of widgets. Toplevel widgets are Tk and Toplevel. Other
