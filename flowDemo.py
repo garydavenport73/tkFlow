@@ -1,4 +1,5 @@
-from tkinterFlow import *
+from tkinter import *
+from tkinterflow import *
 
 def main():
 
