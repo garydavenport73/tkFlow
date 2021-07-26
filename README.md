@@ -158,3 +158,6 @@ button3.flow(sticky=NSEW)
 
 root.mainloop()
 ```
+
+##### Update Notes:
+The tkinterflow module 0.0.4 has been changed significantly in the way it works.  Instead of modifying tkinters `__init__.py` file to achieve adding the .flow method to widgets, I use inheritence to make a child from each widget (except the Menu widget).  Then I add the flow method to the child.  Then I reassign the name of the parent to the child.  This relies on you first importing tkinter, then importing tkinterflow as noted this order is important.  I did this because I did not want to edit my package everytime someone makes a change to tkinters initialization file.
