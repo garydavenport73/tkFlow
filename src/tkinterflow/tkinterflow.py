@@ -33,57 +33,41 @@ def organizeWidgetsWithPlace(frame):
 def stopOrganizingWidgets(frame):
     frame.unbind("<Configure>")
 
+    def _reorganizeWidgetsWithGrid(self):
+        widgetsFrame = self
+        widgetDictionary = widgetsFrame.children
+        widgetKeys = []  # keys in key value pairs of the childwidgets
 
-def _reorganizeWidgetsWithGrid(frame):
-    widgetsFrame = frame
-    widgetDictionary = widgetsFrame.children
-    widgetKeys = []  # keys in key value pairs of the childwidgets
+        for key in widgetDictionary:
+            widgetKeys.append(key)
 
-    for key in widgetDictionary:
-        widgetKeys.append(key)
-
-    # using calls to recursive definition
-    for i in range(len(widgetDictionary)):
-        row, column = _getGridPosition(
-            i, widgetsFrame, widgetDictionary, widgetKeys)
-        widgetDictionary[widgetKeys[i]].grid(row=row, column=column)
-        widgetsFrame.update()
-        widgetsFrame.update_idletasks()
-
-# given widget i, return its column, row, based on widgets before i, all
-# widgets before widget i must have already been gridded
-
-
-def _getGridPosition(i, widgetsFrame, widgetDictionary, widgetKeys):
-
-    widgetsFrame.update()
-    widgetsFrame.update_idletasks()
-
-    for key in widgetDictionary:
-        widgetKeys.append(key)
-
-    if i == 0:
-        row = 0
-        column = 0
-        return row, column
-
-    lastWidgetsRow = widgetDictionary[widgetKeys[i-1]].grid_info()["row"]
-    lastWidgetsColumn = widgetDictionary[widgetKeys[i-1]].grid_info()["column"]
-
-    # returns the right sided x value of the previous widget
-    width = widgetsFrame.grid_bbox(
-        row=0, column=0, row2=lastWidgetsRow, col2=lastWidgetsColumn)[2]
-
-    if width+widgetDictionary[widgetKeys[i]].winfo_width() > widgetsFrame.winfo_width():
-        # return the last widget row+1, 0
-        row = widgetDictionary[widgetKeys[i-1]].grid_info()["row"] + 1
-        column = 0
-    else:
-        # return the last widget row, col+1
-        row = widgetDictionary[widgetKeys[i-1]].grid_info()["row"]
-        column = widgetDictionary[widgetKeys[i-1]].grid_info()["column"] + 1
-
-    return row, column
+        for i in range(len(widgetDictionary)):
+            if i == 0:  # place first widget in 0,0
+                widgetDictionary[widgetKeys[i]].grid(row=0, column=0)
+            else:
+                lastWidgetsRow = widgetDictionary[widgetKeys[i-1]].grid_info()[
+                    "row"]
+                lastWidgetsColumn = widgetDictionary[widgetKeys[i-1]].grid_info()[
+                    "column"]
+                width = widgetsFrame.grid_bbox(
+                    row=0, column=0, row2=lastWidgetsRow, col2=lastWidgetsColumn)[2]
+                # if adding the widget pushes the widget past the frame edge, go to next row column 0
+                if width+widgetDictionary[widgetKeys[i]].winfo_width() > widgetsFrame.winfo_width():
+                    row = widgetDictionary[widgetKeys[i-1]
+                                           ].grid_info()["row"] + 1
+                    column = 0
+                    widgetDictionary[widgetKeys[i]].grid(
+                        row=row, column=column)
+                # if adding the widget does not go past the widget, add it to the next column same row
+                else:
+                    row = widgetDictionary[widgetKeys[i-1]].grid_info()["row"]
+                    column = widgetDictionary[widgetKeys[i-1]
+                                              ].grid_info()["column"] + 1
+                    widgetDictionary[widgetKeys[i]].grid(
+                        row=row, column=column)
+            # update to make sure widths etc accurate
+            widgetsFrame.update()
+            widgetsFrame.update_idletasks()
 
 
 def _reorganizeWidgetsWithPlace(frame):
