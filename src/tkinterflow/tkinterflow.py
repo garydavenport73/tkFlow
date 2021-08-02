@@ -4,12 +4,22 @@ from tkinter import Button, Canvas, Checkbutton, Entry, Frame, Label, Listbox, \
 
 
 def organizeWidgetsWithGrid(frame):
+    stopOrganizingWidgets(frame)
+
     slaves = frame.pack_slaves()
     for slave in slaves:
-        slave.flow(mode='grid')
-    slaves = frame.place_slaves()
+        slave.pack_forget()
     for slave in slaves:
         slave.flow(mode='grid')
+
+    slaves = frame.place_slaves()
+    for slave in slaves:
+        slave.place_forget()
+    for slave in slaves:
+        slave.flow(mode='grid')
+
+    frame.update()
+    frame.update_idletasks()
 
     _reorganizeWidgetsWithGrid(frame)
     frame.bind("<Configure>", lambda event: _reorganizeWidgetsWithGrid(frame))
@@ -17,13 +27,22 @@ def organizeWidgetsWithGrid(frame):
 
 
 def organizeWidgetsWithPlace(frame):
-    # _unpack_unplace_ungrid(frame)
+    stopOrganizingWidgets(frame)
+    
     slaves = frame.pack_slaves()
     for slave in slaves:
-        slave.flow(mode='place')
-    slaves = frame.grid_slaves()
+        slave.pack_forget()
     for slave in slaves:
         slave.flow(mode='place')
+
+    slaves = frame.grid_slaves()
+    for slave in slaves:
+        slave.grid_forget()
+    for slave in slaves:
+        slave.flow(mode='place')
+
+    frame.update()
+    frame.update_idletasks()
 
     _reorganizeWidgetsWithPlace(frame)
     frame.bind("<Configure>", lambda event: _reorganizeWidgetsWithPlace(frame))
@@ -32,6 +51,7 @@ def organizeWidgetsWithPlace(frame):
 
 def stopOrganizingWidgets(frame):
     frame.unbind("<Configure>")
+
 
 def _reorganizeWidgetsWithGrid(self):
     widgetsFrame = self
