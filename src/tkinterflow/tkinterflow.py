@@ -236,9 +236,9 @@ class FlowEntry(Entry):
         _flow_destroy(self, self.mode)
 
 
-class FlowFrame(Frame):
+class FlowedFrame(Frame):
     def __init__(self, *args, **kwargs):
-        super(FlowFrame, self).__init__(*args, **kwargs)
+        super(FlowedFrame, self).__init__(*args, **kwargs)
         self.mode = "place"
 
     def flow(self, mode="grid", *args, **kwargs):
@@ -432,7 +432,7 @@ Button = FlowButton
 Canvas = FlowCanvas
 Checkbutton = FlowCheckbutton
 Entry = FlowEntry
-Frame = FlowFrame
+Frame = FlowedFrame
 Label = FlowLabel
 Listbox = FlowListbox
 Menubutton = FlowMenubutton
