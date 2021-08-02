@@ -33,41 +33,41 @@ def organizeWidgetsWithPlace(frame):
 def stopOrganizingWidgets(frame):
     frame.unbind("<Configure>")
 
-    def _reorganizeWidgetsWithGrid(self):
-        widgetsFrame = self
-        widgetDictionary = widgetsFrame.children
-        widgetKeys = []  # keys in key value pairs of the childwidgets
+def _reorganizeWidgetsWithGrid(self):
+    widgetsFrame = self
+    widgetDictionary = widgetsFrame.children
+    widgetKeys = []  # keys in key value pairs of the childwidgets
 
-        for key in widgetDictionary:
-            widgetKeys.append(key)
+    for key in widgetDictionary:
+        widgetKeys.append(key)
 
-        for i in range(len(widgetDictionary)):
-            if i == 0:  # place first widget in 0,0
-                widgetDictionary[widgetKeys[i]].grid(row=0, column=0)
+    for i in range(len(widgetDictionary)):
+        if i == 0:  # place first widget in 0,0
+            widgetDictionary[widgetKeys[i]].grid(row=0, column=0)
+        else:
+            lastWidgetsRow = widgetDictionary[widgetKeys[i-1]].grid_info()[
+                "row"]
+            lastWidgetsColumn = widgetDictionary[widgetKeys[i-1]].grid_info()[
+                "column"]
+            width = widgetsFrame.grid_bbox(
+                row=0, column=0, row2=lastWidgetsRow, col2=lastWidgetsColumn)[2]
+            # if adding the widget pushes the widget past the frame edge, go to next row column 0
+            if width+widgetDictionary[widgetKeys[i]].winfo_width() > widgetsFrame.winfo_width():
+                row = widgetDictionary[widgetKeys[i-1]
+                                        ].grid_info()["row"] + 1
+                column = 0
+                widgetDictionary[widgetKeys[i]].grid(
+                    row=row, column=column)
+            # if adding the widget does not go past the widget, add it to the next column same row
             else:
-                lastWidgetsRow = widgetDictionary[widgetKeys[i-1]].grid_info()[
-                    "row"]
-                lastWidgetsColumn = widgetDictionary[widgetKeys[i-1]].grid_info()[
-                    "column"]
-                width = widgetsFrame.grid_bbox(
-                    row=0, column=0, row2=lastWidgetsRow, col2=lastWidgetsColumn)[2]
-                # if adding the widget pushes the widget past the frame edge, go to next row column 0
-                if width+widgetDictionary[widgetKeys[i]].winfo_width() > widgetsFrame.winfo_width():
-                    row = widgetDictionary[widgetKeys[i-1]
-                                           ].grid_info()["row"] + 1
-                    column = 0
-                    widgetDictionary[widgetKeys[i]].grid(
-                        row=row, column=column)
-                # if adding the widget does not go past the widget, add it to the next column same row
-                else:
-                    row = widgetDictionary[widgetKeys[i-1]].grid_info()["row"]
-                    column = widgetDictionary[widgetKeys[i-1]
-                                              ].grid_info()["column"] + 1
-                    widgetDictionary[widgetKeys[i]].grid(
-                        row=row, column=column)
-            # update to make sure widths etc accurate
-            widgetsFrame.update()
-            widgetsFrame.update_idletasks()
+                row = widgetDictionary[widgetKeys[i-1]].grid_info()["row"]
+                column = widgetDictionary[widgetKeys[i-1]
+                                            ].grid_info()["column"] + 1
+                widgetDictionary[widgetKeys[i]].grid(
+                    row=row, column=column)
+        # update to make sure widths etc accurate
+        widgetsFrame.update()
+        widgetsFrame.update_idletasks()
 
 
 def _reorganizeWidgetsWithPlace(frame):
