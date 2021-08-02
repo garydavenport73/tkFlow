@@ -10,13 +10,13 @@ def organizeWidgetsWithGrid(frame):
     for slave in slaves:
         slave.pack_forget()
     for slave in slaves:
-        slave.flow(mode='grid')
+        slave.grid()
 
     slaves = frame.place_slaves()
     for slave in slaves:
         slave.place_forget()
     for slave in slaves:
-        slave.flow(mode='grid')
+        slave.grid()
 
     frame.update()
     frame.update_idletasks()
@@ -33,13 +33,13 @@ def organizeWidgetsWithPlace(frame):
     for slave in slaves:
         slave.pack_forget()
     for slave in slaves:
-        slave.flow(mode='place')
+        slave.place(x=0,y=0)
 
     slaves = frame.grid_slaves()
     for slave in slaves:
         slave.grid_forget()
     for slave in slaves:
-        slave.flow(mode='place')
+        slave.place(x=0,y=0)
 
     frame.update()
     frame.update_idletasks()
